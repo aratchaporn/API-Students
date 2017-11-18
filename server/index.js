@@ -7,21 +7,28 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 let students = [
-    { id: 1, name: 'aa', u: 'buu', year: 2000, email: 'aa@gmail.com' },
-    { id: 2, name: 'bb', u: 'kku', year: 1990, email: 'bb@gmail.com' }
+    { id: 1, name: 'aa', u: 'buu', year: 2000, email: 'aa@gmail.com',faculty:'EN' },
+    { id: 2, name: 'bb', u: 'kku', year: 1990, email: 'bb@gmail.com',faculty:'SC' }
 ]
 
 app.post('/students', (req, res) => {
     let student = req.body
+    student.id = students.length + 1
     students.push(student)
-    res.json(student)
+    res.status(201).json(student)
 })
 
 app.get('/students', (req, res) => {
-    res.json(students)
+    res.status(200).json(students)
 })
 
 app.get('/students/:id', (req, res) => {
+    let id = req.params.id
+
+    if(!id || isNaN(id)){
+        res.status(400).json({errorMessage: 'This api required id parameter'})
+        return
+    }
     res.json(students[req.params.id - 1])
 })
 
